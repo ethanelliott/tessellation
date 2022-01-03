@@ -4,7 +4,8 @@
     "defaultBase": "main"
   },
   "cli": {
-    "defaultCollection": "@nrwl/express"
+    "defaultCollection": "@nrwl/express",
+    "packageManager": "yarn"
   },
   "implicitDependencies": {
     "package.json": {
@@ -17,12 +18,7 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "NGMyODQ4YzMtMTQzOS00Y2Y0LTljZTgtNzliY2QwMTc1YmYwfHJlYWQtd3JpdGU="
       }
     }

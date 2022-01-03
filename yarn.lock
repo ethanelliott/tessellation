@@ -1097,6 +1097,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nrwl/js@npm:13.4.2":
+  version: 13.4.2
+  resolution: "@nrwl/js@npm:13.4.2"
+  dependencies:
+    "@nrwl/devkit": 13.4.2
+    "@nrwl/jest": 13.4.2
+    "@nrwl/linter": 13.4.2
+    "@nrwl/workspace": 13.4.2
+    chalk: 4.1.0
+    js-tokens: ^4.0.0
+    rxjs: ^6.5.4
+    rxjs-for-await: 0.0.2
+    source-map-support: 0.5.19
+    tree-kill: 1.2.2
+  checksum: 4263dccb867d1f6c4d6922ec9aeb1d3dd456d84a6fc3ff5e44da63fd2bd1151dc278803c0fef6036d10584988f6ea9c9ba44909e9de892a924b0c1e5fe94f546
+  languageName: node
+  linkType: hard
+
 "@nrwl/linter@npm:13.4.2":
   version: 13.4.2
   resolution: "@nrwl/linter@npm:13.4.2"
@@ -15968,6 +15986,7 @@ __metadata:
     "@nrwl/eslint-plugin-nx": 13.4.2
     "@nrwl/express": 13.4.2
     "@nrwl/jest": 13.4.2
+    "@nrwl/js": 13.4.2
     "@nrwl/linter": 13.4.2
     "@nrwl/node": 13.4.2
     "@nrwl/nx-cloud": latest

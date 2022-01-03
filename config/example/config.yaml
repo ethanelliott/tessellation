@@ -1,0 +1,6 @@
+environment: dev
+app:
+  address:
+    protocol: http
+    hostname: localhost
+    port: 8881

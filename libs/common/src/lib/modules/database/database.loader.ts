@@ -1,0 +1,65 @@
+/*************************
+ * Copyright 2022
+ * Ethan Elliott
+ *************************/
+
+import {
+  FrameworkLoader,
+  FrameworkLoaderFunction,
+  FrameworkSettings,
+  Loader,
+} from '@tessellation/core';
+import { useContainer as classValidatorUseContainer } from 'class-validator';
+import { Container } from 'typedi';
+import { ConnectionOptions, createConnection, useContainer } from 'typeorm';
+
+import { Logger, LoggerLoader } from '../logger';
+import { DATABASE_CONFIG_TOKEN } from './database-config.token';
+import { DATABASE_ENTITY_TOKEN } from './database-entity.token';
+
+@Loader({
+  deps: [LoggerLoader],
+})
+export class DatabaseLoader implements FrameworkLoader {
+  loader(): FrameworkLoaderFunction {
+    classValidatorUseContainer(Container);
+    useContainer(Container);
+
+    return async (settings?: FrameworkSettings): Promise<void> => {
+      if (settings) {
+        const log = new Logger(__filename, ['ORM']);
+        const config = Container.get(DATABASE_CONFIG_TOKEN);
+
+        const entities = Container.get(DATABASE_ENTITY_TOKEN);
+
+        log.info(
+          `Loading TYPEORM with ${entities.length} entit${
+            entities.length === 1 ? 'y' : 'ies'
+          }`,
+        );
+        log.debug(`[${entities.map(e => e.name).join(', ')}]`);
+
+        const options: ConnectionOptions = {
+          type: config.type as never,
+          host: config.host,
+          port: config.port,
+          username: config.username,
+          password: config.password,
+          database: config.database,
+          synchronize: true,
+          ssl: { rejectUnauthorized: false },
+          logging: ['schema', 'error', 'warn', 'info', 'log'],
+          entities,
+        };
+
+        log.info('Connecting...');
+
+        const connection = await createConnection(options);
+
+        log.info('Connected.');
+
+        settings.setValue('connection', connection);
+      }
+    };
+  }
+}

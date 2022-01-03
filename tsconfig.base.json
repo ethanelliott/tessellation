@@ -10,11 +10,15 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": ["esnext", "dom"],
     "skipLibCheck": true,
+    "strictNullChecks": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@tessellation/common": ["libs/common/src/index.ts"],
+      "@tessellation/core": ["libs/core/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

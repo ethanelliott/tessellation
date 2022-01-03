@@ -150,14 +150,6 @@
               {
                 "sourceTag": "type:lib",
                 "onlyDependOnLibsWithTags": ["type:lib"]
-              },
-              {
-                "sourceTag": "scope:server",
-                "onlyDependOnLibsWithTags": ["scope:server"]
-              },
-              {
-                "sourceTag": "scope:front",
-                "onlyDependOnLibsWithTags": ["scope:front"]
               }
             ]
           }

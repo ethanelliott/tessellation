@@ -1,6 +1,8 @@
 {
   "version": 2,
   "projects": {
-    "test": "apps/test"
+    "common": "libs/common",
+    "core": "libs/core",
+    "example": "apps/example"
   }
 }
