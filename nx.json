@@ -1,7 +1,7 @@
 {
   "npmScope": "tessellation",
   "affected": {
-    "defaultBase": "master"
+    "defaultBase": "main"
   },
   "cli": {
     "defaultCollection": "@nrwl/express"
@@ -15,9 +15,15 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ],
+        "accessToken": "NGMyODQ4YzMtMTQzOS00Y2Y0LTljZTgtNzliY2QwMTc1YmYwfHJlYWQtd3JpdGU="
       }
     }
   },
