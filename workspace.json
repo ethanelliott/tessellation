@@ -3,6 +3,7 @@
   "projects": {
     "common": "libs/common",
     "core": "libs/core",
-    "example": "apps/example"
+    "example": "apps/example",
+    "landing": "apps/landing"
   }
 }

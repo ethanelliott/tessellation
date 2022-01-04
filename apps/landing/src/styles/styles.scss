@@ -1,0 +1,19 @@
+html, * {
+  font-family: 'Work Sans', sans-serif !important;
+}
+
+a {
+  text-decoration: none;
+}
+
+.background {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background: url('/img/background.png') no-repeat fixed center center;
+  background-size: cover;
+}
+
