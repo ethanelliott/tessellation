@@ -5,6 +5,8 @@
 
 export * from './app-config';
 export * from './application';
+export * from './component-types.enum';
+export * from './constructable-with-prototype';
 export * from './framework';
 export * from './framework-configuration';
 export * from './loader';

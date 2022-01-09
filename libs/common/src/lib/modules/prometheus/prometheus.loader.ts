@@ -8,12 +8,12 @@ import {
   FrameworkLoaderFunction,
   Loader,
 } from '@tessellation/core';
-import * as express from 'express';
+import { Application } from 'express';
 import { expressMiddleware as promExpressMiddleware } from 'prometheus-api-metrics';
 import { Container } from 'typedi';
 
+import { addBannerEntry } from '../banner';
 import { ExpressLoader } from '../express';
-import { Logger } from '../logger';
 import { PROMETHEUS_CONFIG_TOKEN } from './prometheus-config.token';
 
 @Loader({
@@ -22,13 +22,12 @@ import { PROMETHEUS_CONFIG_TOKEN } from './prometheus-config.token';
 export class PrometheusLoader implements FrameworkLoader {
   loader(): FrameworkLoaderFunction {
     return (settings): void => {
-      const expressApp = settings?.getValue<express.Application>('express_app');
-      const log = new Logger(__filename, ['PROMETHEUS']);
+      const expressApp = settings?.getValue<Application>('express_app');
       const config = Container.get(PROMETHEUS_CONFIG_TOKEN);
 
       if (expressApp) {
-        log.info(`Registering Prometheus endpoint at '${config.route}'`);
         expressApp.use(promExpressMiddleware({ metricsPath: config.route }));
+        addBannerEntry('prometheus', `#{url}${config.route}`);
       }
     };
   }

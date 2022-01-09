@@ -3,7 +3,7 @@
  * Ethan Elliott
  *************************/
 
-import * as chalk from 'chalk';
+import { blueBright, cyan } from 'chalk';
 import { Container } from 'typedi';
 import { Logger as WinstonLogger } from 'winston';
 
@@ -27,10 +27,6 @@ export class LoggerWrapper {
 
   constructor(private readonly _logger?: WinstonLogger) {
     this._config = Container.get(LOGGER_CONFIG_TOKEN);
-  }
-
-  private static _formatScope(scope?: string): string {
-    return `[${chalk.blueBright(scope)}]`;
   }
 
   log(
@@ -72,6 +68,10 @@ export class LoggerWrapper {
   }
 
   private _formatCustomDecorators(customDecorators?: Array<string>): string {
-    return customDecorators?.map(d => `[${chalk.cyan(d)}]`).join('') ?? '';
+    return customDecorators?.map(d => `[${cyan(d)}]`).join('') ?? '';
+  }
+
+  private static _formatScope(scope?: string): string {
+    return `[${blueBright(scope)}]`;
   }
 }

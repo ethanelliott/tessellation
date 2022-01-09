@@ -11,6 +11,7 @@
   "author": "Ethan Elliott",
   "scripts": {
     "start": "nx serve",
+    "start:example": "nx run example:serve",
     "build": "nx build",
     "test": "nx test"
   },

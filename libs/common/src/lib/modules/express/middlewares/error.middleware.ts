@@ -3,13 +3,14 @@
  * Ethan Elliott
  *************************/
 
-import * as express from 'express';
+import { Request, Response } from 'express';
 import { ExpressErrorMiddlewareInterface } from 'routing-controllers';
 import { Container } from 'typedi';
 
 import { Logger } from '../../logger';
 import { InjectableMiddleware } from '../decorators';
 import { EXPRESS_CONFIG_TOKEN } from '../express-config.token';
+import { HTTPResponseCodes } from '../http-response-codes.enum';
 
 @InjectableMiddleware({ type: 'after' })
 export class ErrorMiddleware implements ExpressErrorMiddlewareInterface {
@@ -17,13 +18,9 @@ export class ErrorMiddleware implements ExpressErrorMiddlewareInterface {
 
   private readonly _config = Container.get(EXPRESS_CONFIG_TOKEN);
 
-  error(
-    error: Error,
-    request: express.Request,
-    response: express.Response,
-  ): void {
+  error(error: Error, request: Request, response: Response): void {
     this._log.error(error);
-    response.status(500);
+    response.status(HTTPResponseCodes.INTERNAL_SERVER_ERROR);
     if (this._config.isProduction) {
       response.json({ error: { name: error.name, message: error.message } });
     } else {

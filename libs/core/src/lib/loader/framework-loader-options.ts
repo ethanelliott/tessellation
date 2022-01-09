@@ -3,11 +3,10 @@
  * Ethan Elliott
  *************************/
 
-import { Constructable } from 'typedi';
-
 import { NonEmptyArray } from '../types';
-import { FrameworkLoader } from './framework-loader';
+import { FrameworkLoaderOrder } from './framework-loader';
 
 export interface FrameworkLoaderOptions {
-  deps?: NonEmptyArray<Constructable<FrameworkLoader>>;
+  deps?: NonEmptyArray<CallableFunction>;
+  order?: FrameworkLoaderOrder;
 }

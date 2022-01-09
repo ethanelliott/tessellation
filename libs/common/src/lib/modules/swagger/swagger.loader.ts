@@ -12,13 +12,14 @@ import {
 import { defaultMetadataStorage } from 'class-transformer/cjs/storage';
 import { MetadataStorage as ClassTransformerMetadataStorage } from 'class-transformer/types/MetadataStorage';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import * as express from 'express';
+import { Application } from 'express';
 import { PathItemObject, PathsObject } from 'openapi3-ts/src/model/OpenApi';
 import { getMetadataArgsStorage } from 'routing-controllers';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
-import * as swaggerUi from 'swagger-ui-express';
+import { serve, setup } from 'swagger-ui-express';
 import { Container } from 'typedi';
 
+import { addBannerEntry } from '../banner';
 import { ExpressLoader } from '../express';
 import { SWAGGER_CONFIG_TOKEN } from './swagger-config.token';
 
@@ -31,8 +32,7 @@ export class SwaggerLoader implements FrameworkLoader {
       const config = Container.get(SWAGGER_CONFIG_TOKEN);
 
       if (settings && config.enabled) {
-        const expressApp =
-          settings.getValue<express.Application>('express_app');
+        const expressApp = settings.getValue<Application>('express_app');
         const schemas = validationMetadatasToSchemas({
           classTransformerMetadataStorage:
             defaultMetadataStorage as ClassTransformerMetadataStorage,
@@ -77,9 +77,11 @@ export class SwaggerLoader implements FrameworkLoader {
         expressApp.use(
           '/swagger',
           (request, response, next: () => void) => next(),
-          swaggerUi.serve,
-          swaggerUi.setup(swaggerFile),
+          serve,
+          setup(swaggerFile),
         );
+
+        addBannerEntry('Swagger', '#{url}/swagger');
       }
     };
   }

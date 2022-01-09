@@ -3,8 +3,10 @@
  * Ethan Elliott
  *************************/
 
-import { Constructable } from 'typedi';
+import { ConstructableWithPrototype } from '../constructable-with-prototype';
+import { FrameworkModulePrototype } from './framework-module-prototype';
 
-import { FrameworkModuleInstance } from './framework-module-instance';
-
-export type FrameworkModule = Constructable<FrameworkModuleInstance>;
+export type ConstructableFrameworkModule = ConstructableWithPrototype<
+  CallableFunction,
+  FrameworkModulePrototype
+>;

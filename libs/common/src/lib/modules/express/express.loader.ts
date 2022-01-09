@@ -10,14 +10,14 @@ import {
   FrameworkUnloaderFunction,
   Loader,
 } from '@tessellation/core';
-import * as cors from 'cors';
-import * as express from 'express';
-import * as helmet from 'helmet';
-import * as http from 'http';
-import * as path from 'path';
+import cors from 'cors';
+import { Application, static as expressServeStatic } from 'express';
+import { createServer, Server } from 'http';
+import { join } from 'path';
 import { createExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
 
+import { addBannerEntry } from '../banner';
 import { Logger, LoggerLoader } from '../logger';
 import { EXPRESS_CONFIG_TOKEN } from './express-config.token';
 import { EXPRESS_CONTROLLER_TOKEN } from './express-controller.token';
@@ -37,7 +37,7 @@ export class ExpressLoader implements FrameworkLoader {
       const controllers = Container.get(EXPRESS_CONTROLLER_TOKEN);
 
       if (settings) {
-        const expressApp: express.Application = createExpressServer({
+        const expressApp: Application = createExpressServer({
           cors: true,
           classTransformer: true,
           validation: false,
@@ -45,18 +45,14 @@ export class ExpressLoader implements FrameworkLoader {
           routePrefix: `/${config.routePrefix}`,
           controllers,
           middlewares: config.middlewares as Array<CallableFunction>,
-        }) as express.Application;
+        }) as Application;
 
         // needed to ensure that it adds cors to dependencies
         log.info('STARTING EXPRESS', JSON.stringify(cors));
 
-        if (config.helmet) {
-          expressApp.use(helmet());
-        }
-
         expressApp.use(
           '/assets',
-          express.static(path.join(__dirname, 'assets'), {
+          expressServeStatic(join(__dirname, 'assets'), {
             maxAge: 31557600000,
           }),
         );
@@ -93,7 +89,9 @@ export class ExpressLoader implements FrameworkLoader {
           });
         }
 
-        const server = http.createServer(expressApp);
+        const server = createServer(expressApp);
+
+        addBannerEntry('api', `#{url}${config.routePrefix}`);
 
         settings.setValue('server', server);
         settings.setValue('express_app', expressApp);
@@ -108,7 +106,7 @@ export class ExpressLoader implements FrameworkLoader {
 
         log.info('starting graceful shutdown');
         if (settings.hasValue('server')) {
-          const server = settings.getValue<http.Server>('server');
+          const server = settings.getValue<Server>('server');
 
           server.close(() => {
             log.info('shutdown successfully');

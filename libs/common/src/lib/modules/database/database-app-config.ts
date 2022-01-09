@@ -3,7 +3,7 @@
  * Ethan Elliott
  *************************/
 
-import { DatabaseConfig } from '@tessellation/common';
+import { DatabaseConfig } from './database-config';
 
 export interface DatabaseAppConfig {
   database: DatabaseConfig;

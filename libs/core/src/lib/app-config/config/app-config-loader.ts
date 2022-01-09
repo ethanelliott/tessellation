@@ -4,31 +4,13 @@
  *************************/
 
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { join, parse } from 'path';
 
 import { AppConfig } from './app-config';
 import { AppConfigConstructor } from './app-config-constructor';
 import { GenericAppConfig } from './generic-app-config';
+import { PackageJSON } from './package-json';
 import { URLComponents } from './url-components';
-
-export interface PackageJSON {
-  name: string;
-  version: string;
-  description: string;
-  homepage: string;
-  license: string;
-  main: string;
-  repository:
-    | string
-    | {
-        type: string;
-        url: string;
-        directory: string;
-      };
-  scripts: Record<string, string>;
-  dependencies: Record<string, string>;
-  devDependencies: Record<string, string>;
-}
 
 const getOsEnvironmentVariable = (
   key: string,
@@ -45,18 +27,14 @@ const getOsEnvironmentVariable = (
 };
 
 /**
- * @param appName
  * @param address
  */
-function generateUrl(appName: string, address?: URLComponents): URL {
+function generateUrl(address?: URLComponents): URL {
   const x = new URL('http://localhost');
 
   x.protocol = address?.protocol ?? 'https';
-  x.hostname = address?.hostname ?? `${appName}.competence.one`;
-  if (address?.port !== undefined) {
-    x.port = address.port.toString(10);
-  }
-  x.pathname = address?.routePrefix ?? 'api';
+  x.hostname = address?.hostname ?? 'localhost';
+  x.port = address?.port?.toString(10) ?? '8443';
 
   return x;
 }
@@ -67,18 +45,27 @@ function generateUrl(appName: string, address?: URLComponents): URL {
 export function appConfigLoader<T extends GenericAppConfig>(
   config: T,
 ): AppConfig<T> {
-  const packageJson: PackageJSON = JSON.parse(
-    readFileSync(join(__dirname, './package.json'), 'utf-8'),
-  ) as PackageJSON;
-
   if (config.app === undefined) {
     config.app = {} as never;
   }
 
-  config.app.name = packageJson.name;
-  config.app.version = packageJson.version;
-  config.app.description = packageJson.description;
-  config.app.url = generateUrl(config.app.name, config.app.address);
+  try {
+    const cwd = parse(process.argv[1]);
+    const packageJson: PackageJSON = JSON.parse(
+      readFileSync(join(cwd.dir, './package.json'), 'utf-8'),
+    ) as PackageJSON;
+
+    config.app.name = config.app.name ?? packageJson.name;
+    config.app.version = config.app.version ?? packageJson.version;
+    config.app.description = config.app.description ?? packageJson.description;
+  } catch (e: unknown) {
+    console.error('Unable to locate package.json');
+    config.app.name = config.app.name ?? '';
+    config.app.version = config.app.version ?? '';
+    config.app.description = config.app.description ?? '';
+  }
+
+  config.app.url = generateUrl(config.app.address);
   config.isProduction =
     getOsEnvironmentVariable('NODE_ENV', true) === 'production';
 

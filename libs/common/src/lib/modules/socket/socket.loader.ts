@@ -9,9 +9,9 @@ import {
   FrameworkSettings,
   Loader,
 } from '@tessellation/core';
-import * as EventEmitter from 'events';
+import EventEmitter from 'events';
 import { Server as HTTPServer } from 'http';
-import * as socketIO from 'socket.io';
+import socketIO from 'socket.io';
 import { useContainer, useSocketServer } from 'socket-controllers';
 import { Container } from 'typedi';
 

@@ -4,19 +4,24 @@
  *************************/
 
 import { GenericAppConfig } from '../app-config';
+import { ComponentTypes } from '../component-types.enum';
 import { Framework } from '../framework';
 import { FrameworkApplicationOptions } from './framework-application-options';
+import { FrameworkApplicationPrototype } from './framework-application-prototype';
 
 export const Application =
   <T extends GenericAppConfig>(
     options: FrameworkApplicationOptions<T>,
   ): ClassDecorator =>
   (target: CallableFunction): void => {
-    const proto = target.prototype as Record<string, unknown>;
+    const proto = target.prototype as FrameworkApplicationPrototype;
 
-    Object.entries(options).forEach(([key, value]) => {
-      proto[key] = value;
-    });
+    proto.type = ComponentTypes.APPLICATION;
+
+    proto.modules = options.modules;
+    proto.loaders = options.loaders;
+    proto.providers = options.providers;
+    proto.appConfigToken = options.appConfigToken;
 
     proto.created = new Date().toISOString();
 

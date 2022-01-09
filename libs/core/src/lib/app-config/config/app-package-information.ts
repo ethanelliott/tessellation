@@ -4,7 +4,7 @@
  *************************/
 
 export interface AppPackageInformation {
-  name: string;
-  version: string;
-  description: string;
+  name?: string;
+  version?: string;
+  description?: string;
 }

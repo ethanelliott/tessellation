@@ -3,14 +3,13 @@
  * Ethan Elliott
  *************************/
 
-import * as chalk from 'chalk';
-import * as Transport from 'winston-transport';
+import { blue, cyan, green, magenta, red, redBright } from 'chalk';
 
-export class ConsoleTransport extends Transport {
+export class ConsoleTransport {
   log(info: Record<string, string>, next: () => void): void {
     // eslint-disable-next-line no-console
     console.log(
-      `[${chalk.magenta(info.timestamp)}][${this.colourizeLevel(info.level)}]${
+      `[${magenta(info.timestamp)}][${this.colourizeLevel(info.level)}]${
         info.message
       }`,
     );
@@ -20,22 +19,22 @@ export class ConsoleTransport extends Transport {
   colourizeLevel(level: string): string {
     switch (level) {
       case 'error':
-        return chalk.red(level);
+        return red(level);
 
       case 'warn':
-        return chalk.redBright(level);
+        return redBright(level);
 
       case 'help':
-        return chalk.cyan(level);
+        return cyan(level);
 
       case 'info':
-        return chalk.green(level);
+        return green(level);
 
       case 'debug':
-        return chalk.blue(level);
+        return blue(level);
 
       case 'silly':
-        return chalk.magenta(level);
+        return magenta(level);
 
       default:
         return level;

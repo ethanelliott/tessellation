@@ -12,11 +12,7 @@ import {
 
 import { ExpressConfig } from './express-config';
 import { EXPRESS_CONFIG_TOKEN } from './express-config.token';
-import {
-  ErrorMiddleware,
-  LogMiddleware,
-  SecurityMiddleware,
-} from './middlewares';
+import { ErrorMiddleware, LogMiddleware } from './middlewares';
 
 export const ExpressProvider: FrameworkProvider<ExpressConfig> = {
   provide: EXPRESS_CONFIG_TOKEN,
@@ -33,6 +29,6 @@ export const ExpressProvider: FrameworkProvider<ExpressConfig> = {
       description: appConfig.get('app.description', true),
       actuator: appConfig.get('actuator') ?? true,
       helmet: appConfig.get('helmet') ?? false,
-      middlewares: [SecurityMiddleware, LogMiddleware, ErrorMiddleware],
+      middlewares: [LogMiddleware, ErrorMiddleware],
     },
 };

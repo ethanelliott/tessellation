@@ -11,4 +11,5 @@ export * from './express-config';
 export * from './express-config.token';
 export * from './express-controller.token';
 export * from './generic-express-object';
+export * from './http-response-codes.enum';
 export * from './middlewares';

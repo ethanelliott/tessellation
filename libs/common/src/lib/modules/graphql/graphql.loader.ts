@@ -12,13 +12,14 @@ import {
 } from '@tessellation/core';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
-import { Express } from 'express';
+import { Application } from 'express';
 import { execute, subscribe } from 'graphql';
 import { Server } from 'http';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { buildSchema } from 'type-graphql';
 import { Container } from 'typedi';
 
+import { addBannerEntry } from '../banner';
 import { ExpressLoader } from '../express';
 import { Logger } from '../logger';
 import { GRAPHQL_CONFIG_TOKEN } from './graphql-config.token';
@@ -39,8 +40,7 @@ export class GraphqlLoader implements FrameworkLoader {
         ) as NonEmptyArray<CallableFunction>;
 
         log.info('Starting graphql');
-        const app: Express.Application =
-          settings.getValue<Express.Application>('express_app');
+        const app: Application = settings.getValue<Application>('express_app');
 
         const schema = await buildSchema({
           ...config.buildSchemaOptions,
@@ -78,6 +78,8 @@ export class GraphqlLoader implements FrameworkLoader {
         );
 
         log.info(ss.server.path);
+
+        addBannerEntry('graphql', `#{url}${config.path}`);
       }
     };
   }

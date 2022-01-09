@@ -3,8 +3,11 @@
  * Ethan Elliott
  *************************/
 
-import { Constructable } from 'typedi';
-
+import { ConstructableWithPrototype } from '../constructable-with-prototype';
 import { FrameworkApplicationInstance } from './framework-application-instance';
+import { FrameworkApplicationPrototype } from './framework-application-prototype';
 
-export type FrameworkApplication = Constructable<FrameworkApplicationInstance>;
+export type ConstructableFrameworkApplication = ConstructableWithPrototype<
+  FrameworkApplicationInstance,
+  FrameworkApplicationPrototype
+>;

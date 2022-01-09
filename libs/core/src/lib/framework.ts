@@ -3,9 +3,10 @@
  * Ethan Elliott
  *************************/
 
-import { Constructable, Container, Token } from 'typedi';
+import { Container, Token } from 'typedi';
 
 import { GenericAppConfig } from './app-config';
+import { ComponentTypes } from './component-types.enum';
 import {
   dedupeArray,
   flattenDependencyTree,
@@ -13,22 +14,32 @@ import {
   Tree,
 } from './dependency-tree.util';
 import { FrameworkConfiguration } from './framework-configuration';
-import { FrameworkLoader, FrameworkUnloaderFunction } from './loader';
-import { FrameworkModule, ModuleWithProviders } from './module';
+import {
+  ConstructableFrameworkLoader,
+  FrameworkLoaderOrder,
+  FrameworkUnloaderFunction,
+} from './loader';
+import {
+  ConstructableFrameworkModule,
+  FrameworkModulePrototype,
+  ModuleWithProviders,
+} from './module';
 import {
   APP_CONFIG_TOKEN_SYMBOL,
-  FrameworkProvider,
+  GenericFrameworkProvider,
 } from './provider/framework-provider';
 import { FrameworkSettings } from './settings/framework-settings';
 
 export class Framework {
   private _appConfig: Token<GenericAppConfig>;
 
-  private readonly _modules: Array<FrameworkModule | ModuleWithProviders>;
+  private readonly _modules: Array<
+    ConstructableFrameworkModule | ModuleWithProviders
+  >;
 
-  private readonly _providers: Array<FrameworkProvider<unknown>>;
+  private readonly _providers: Array<GenericFrameworkProvider>;
 
-  private readonly _loaders: Array<Constructable<FrameworkLoader>>;
+  private readonly _loaders: Array<ConstructableFrameworkLoader>;
 
   private readonly _unloaders: Array<FrameworkUnloaderFunction>;
 
@@ -53,24 +64,34 @@ export class Framework {
   }
 
   private _registerModules(
-    modules: Array<FrameworkModule | ModuleWithProviders>,
+    modules: Array<ConstructableFrameworkModule | ModuleWithProviders>,
   ): this {
+    modules.forEach(m => {
+      if (
+        !('frameworkModule' in m) &&
+        (m.prototype.type as ComponentTypes) !== ComponentTypes.MODULE
+      ) {
+        throw new Error(`[${m.name}] is not of type module.`);
+      }
+    });
     this._modules.push(...modules);
 
     return this;
   }
 
-  private _registerProviders(
-    providers: Array<FrameworkProvider<unknown>>,
-  ): this {
+  private _registerProviders(providers: Array<GenericFrameworkProvider>): this {
     this._providers.push(...providers);
 
     return this;
   }
 
-  private _registerLoaders(
-    loaders: Array<Constructable<FrameworkLoader>>,
-  ): this {
+  private _registerLoaders(loaders: Array<ConstructableFrameworkLoader>): this {
+    loaders.forEach(l => {
+      if ((l.prototype.type as ComponentTypes) !== ComponentTypes.LOADER) {
+        throw new Error(`[${l.name}] is not a loader.`);
+      }
+    });
+
     this._loaders.push(...loaders);
 
     return this;
@@ -85,23 +106,20 @@ export class Framework {
   }
 
   private _recursiveParseModule(
-    modules: Array<FrameworkModule | ModuleWithProviders>,
+    modules: Array<ConstructableFrameworkModule | ModuleWithProviders>,
   ): Array<CallableFunction> {
     return modules.flatMap(fModule => {
       if ('frameworkModule' in fModule) {
         this._registerProviders(
-          fModule.providers as Array<FrameworkProvider<unknown>>,
+          fModule.providers as Array<GenericFrameworkProvider>,
         );
 
         return fModule.frameworkModule;
       }
 
-      const childModules = (
-        fModule.prototype as Record<
-          string,
-          Array<FrameworkModule | ModuleWithProviders> | undefined
-        >
-      ).modules;
+      const childModules = fModule.prototype.modules as
+        | Array<ConstructableFrameworkModule | ModuleWithProviders>
+        | undefined;
 
       if (childModules !== undefined) {
         return [fModule, ...this._recursiveParseModule(childModules)];
@@ -115,12 +133,12 @@ export class Framework {
     const parsedModules = this._recursiveParseModule(this._modules);
 
     return await this._runInSequence(parsedModules, async fModule => {
-      const fModuleData = fModule.prototype as Record<string, Array<unknown>>;
+      const fModuleData = fModule.prototype as FrameworkModulePrototype;
       const moduleProviders = fModuleData.providers as
-        | Array<FrameworkProvider<unknown>>
+        | Array<GenericFrameworkProvider>
         | undefined;
       const moduleLoaders = fModuleData.loaders as
-        | Array<Constructable<FrameworkLoader>>
+        | Array<ConstructableFrameworkLoader>
         | undefined;
 
       if (moduleProviders) {
@@ -142,7 +160,13 @@ export class Framework {
           (Array.isArray(a.deps) ? a.deps.length : -1) -
           (Array.isArray(b.deps) ? b.deps.length : -1),
       ),
-    );
+    ).map(provider => {
+      if (provider.provide === APP_CONFIG_TOKEN_SYMBOL) {
+        provider.provide = this._appConfig;
+      }
+
+      return provider;
+    });
 
     return await this._runInSequence(sortedProviders, async provider => {
       const toInject: Array<unknown> = [];
@@ -159,28 +183,30 @@ export class Framework {
 
       return await Promise.resolve()
         .then(() => provider.useValue(...toInject))
-        .then(value => Container.set(provider.provide, value));
+        .then(value =>
+          Container.set(provider.provide as Token<unknown>, value),
+        );
     }).then(() => this);
   }
 
   private async _bootstrapLoaders(): Promise<Framework> {
     const settings = new FrameworkSettings();
 
-    const loadersMap: Map<string, Constructable<FrameworkLoader>> = new Map<
+    const loadersMap: Map<string, ConstructableFrameworkLoader> = new Map<
       string,
-      Constructable<FrameworkLoader>
+      ConstructableFrameworkLoader
     >();
     const sortedLoaders = this._loaders.sort(
-      (a, b) => a.prototype.deps.length - b.prototype.deps.length,
+      (a, b) =>
+        (a.prototype.deps?.length ?? 0) - (b.prototype.deps?.length ?? 0),
     );
 
     const dependencyRelationships: Record<string, Array<string>> = {};
 
     sortedLoaders.forEach(loader => {
       const loaderName = loader.name;
-      const dependencies = loader.prototype.deps as Array<
-        Constructable<CallableFunction>
-      >;
+      const dependencies = (loader.prototype.deps ??
+        []) as Array<ConstructableFrameworkLoader>;
 
       loadersMap.set(loaderName, loader);
 
@@ -201,15 +227,27 @@ export class Framework {
       dependencyRelationships,
     );
 
-    const deduplicatedLoaders: Array<Constructable<FrameworkLoader>> =
+    const deduplicatedLoaders: Array<ConstructableFrameworkLoader> =
       dedupeArray(flattenDependencyTree(dependencyTree)).map(loaderName => {
         if (loadersMap.has(loaderName)) {
           return loadersMap.get(loaderName);
         }
         throw new Error(`Cannot find loader '${loaderName}'`);
-      }) as Array<Constructable<FrameworkLoader>>;
+      }) as Array<ConstructableFrameworkLoader>;
 
-    return await this._runInSequence(deduplicatedLoaders, async loader => {
+    const finalSortOrder = [
+      ...deduplicatedLoaders.filter(
+        e => e.prototype.order === FrameworkLoaderOrder.FIRST,
+      ),
+      ...deduplicatedLoaders.filter(
+        e => e.prototype.order === FrameworkLoaderOrder.ANY,
+      ),
+      ...deduplicatedLoaders.filter(
+        e => e.prototype.order === FrameworkLoaderOrder.LAST,
+      ),
+    ];
+
+    return await this._runInSequence(finalSortOrder, async loader => {
       const constructedLoader = new loader();
 
       if (typeof constructedLoader.unloader === 'function') {
@@ -269,19 +307,21 @@ export class Framework {
 
     if (config.modules) {
       framework._registerModules(
-        config.modules as Array<FrameworkModule | ModuleWithProviders>,
+        config.modules as Array<
+          ConstructableFrameworkModule | ModuleWithProviders
+        >,
       );
     }
 
     if (config.providers) {
       framework._registerProviders(
-        config.providers as Array<FrameworkProvider<unknown>>,
+        config.providers as Array<GenericFrameworkProvider>,
       );
     }
 
     if (config.loaders) {
       framework._registerLoaders(
-        config.loaders as Array<Constructable<FrameworkLoader>>,
+        config.loaders as Array<ConstructableFrameworkLoader>,
       );
     }
 

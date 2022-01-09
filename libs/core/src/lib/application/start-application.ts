@@ -3,10 +3,10 @@
  * Ethan Elliott
  *************************/
 
-import { FrameworkApplication } from './framework-application';
+import { ConstructableFrameworkApplication } from './framework-application';
 
 export const startApplication = (application: unknown): void => {
-  const ConstructableApplication = application as FrameworkApplication;
+  const ConstructableApplication = application as ConstructableFrameworkApplication;
   const instance = new ConstructableApplication();
 
   if (typeof instance.start === 'function') {
