@@ -5,8 +5,20 @@
 
 import { Container, Token } from 'typedi';
 
-import { GenericAppConfig } from './app-config';
-import { ComponentTypes } from './component-types.enum';
+import { GenericAppConfig } from '../app-config';
+import { ComponentTypes } from '../component-types.enum';
+import {
+  ConstructableFrameworkLoader,
+  FrameworkLoaderOrder,
+  FrameworkUnloaderFunction,
+} from '../loader';
+import {
+  ConstructableFrameworkModule,
+  FrameworkModulePrototype,
+  ModuleWithProviders,
+} from '../module';
+import { APP_CONFIG_TOKEN_SYMBOL, GenericFrameworkProvider } from '../provider';
+import { FrameworkSettings } from '../settings';
 import {
   dedupeArray,
   flattenDependencyTree,
@@ -14,21 +26,7 @@ import {
   Tree,
 } from './dependency-tree.util';
 import { FrameworkConfiguration } from './framework-configuration';
-import {
-  ConstructableFrameworkLoader,
-  FrameworkLoaderOrder,
-  FrameworkUnloaderFunction,
-} from './loader';
-import {
-  ConstructableFrameworkModule,
-  FrameworkModulePrototype,
-  ModuleWithProviders,
-} from './module';
-import {
-  APP_CONFIG_TOKEN_SYMBOL,
-  GenericFrameworkProvider,
-} from './provider/framework-provider';
-import { FrameworkSettings } from './settings/framework-settings';
+import { runInOrder } from './run-in-order';
 
 export class Framework {
   private _appConfig: Token<GenericAppConfig>;
@@ -132,7 +130,7 @@ export class Framework {
   private async _bootstrapModules(): Promise<Framework> {
     const parsedModules = this._recursiveParseModule(this._modules);
 
-    return await this._runInSequence(parsedModules, async fModule => {
+    return await runInOrder(parsedModules, async fModule => {
       const fModuleData = fModule.prototype as FrameworkModulePrototype;
       const moduleProviders = fModuleData.providers as
         | Array<GenericFrameworkProvider>
@@ -168,7 +166,7 @@ export class Framework {
       return provider;
     });
 
-    return await this._runInSequence(sortedProviders, async provider => {
+    return await runInOrder(sortedProviders, async provider => {
       const toInject: Array<unknown> = [];
 
       if (Array.isArray(provider.deps) && provider.deps.length > 0) {
@@ -247,7 +245,7 @@ export class Framework {
       ),
     ];
 
-    return await this._runInSequence(finalSortOrder, async loader => {
+    return await runInOrder(finalSortOrder, async loader => {
       const constructedLoader = new loader();
 
       if (typeof constructedLoader.unloader === 'function') {
@@ -264,7 +262,7 @@ export class Framework {
     })
       .then(() => {
         const onTerminateHandler = (): void => {
-          this._runInSequence(this._unloaders, async unloader => {
+          runInOrder(this._unloaders, async unloader => {
             await unloader(settings);
           }).catch(error =>
             console.error('Unable to shutdown gracefully.', error),
@@ -275,25 +273,6 @@ export class Framework {
         process.on('SIGINT', onTerminateHandler);
       })
       .then(() => this);
-  }
-
-  private async _runInSequence<T, U>(
-    collection: Array<T>,
-    callback: (item: T) => Promise<U>,
-  ): Promise<Array<U>> {
-    const results: Array<U> = [];
-
-    return await collection
-      .reduce(
-        async (promise, item) =>
-          await promise
-            .then(async () => await callback(item))
-            .then(result => {
-              results.push(result);
-            }),
-        Promise.resolve(),
-      )
-      .then(() => results);
   }
 
   static configure<T extends GenericAppConfig>(

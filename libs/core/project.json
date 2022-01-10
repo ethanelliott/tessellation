@@ -28,6 +28,37 @@
         "jestConfig": "libs/core/jest.config.js",
         "passWithNoTests": true
       }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx run core:bump",
+          "nx run core:build",
+          "nx run core:npm-publish"
+        ],
+        "parallel": false
+      }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm publish"
+        ],
+        "cwd": "dist/libs/core",
+        "parallel": false
+      }
+    },
+    "bump": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm version patch"
+        ],
+        "cwd": "libs/core",
+        "parallel": false
+      }
     }
   },
   "tags": ["type:lib"]

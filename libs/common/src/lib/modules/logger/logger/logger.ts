@@ -20,7 +20,10 @@ export class Logger implements LoggerInterface {
   private readonly _customDecorators: Array<string>;
 
   constructor(scope?: string, customDecorators?: Array<string>) {
-    this._scope = Logger._parsePathToScope(scope ?? Logger.DEFAULT_SCOPE);
+    this._scope =
+      scope === undefined || scope.includes('node_modules')
+        ? Logger._parsePathToScope(Logger.DEFAULT_SCOPE)
+        : Logger._parsePathToScope(scope);
     this._customDecorators = customDecorators ?? [];
     this._logger = Container.get(LOGGER_TOKEN);
   }
