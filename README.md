@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="tessellation-logo.png" alt="angular-logo" height="140px"/>
+  <img src="icons/icon-512x512.png" alt="angular-logo" height="140px"/>
 </p>
 
 <h1 align="center">Tesselation</h1>
@@ -27,3 +27,4 @@ interfaces by combining components that can scope their own functionality and
 state. By providing an easy way to describe these components and connect them
 together, you can focus on writing the code that drives business value rather
 than re-implement basic requirements.
+

@@ -3,7 +3,7 @@
  * Ethan Elliott
  *************************/
 
-import { ConstructableWithPrototype } from '../constructable-with-prototype';
+import { ConstructableWithPrototype } from '../constructable';
 import { FrameworkModulePrototype } from './framework-module-prototype';
 
 export type ConstructableFrameworkModule = ConstructableWithPrototype<

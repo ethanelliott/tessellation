@@ -3,14 +3,14 @@
  * Ethan Elliott
  *************************/
 
-import { GenericAppConfig } from '../app-config';
+import { AppConfig, GenericAppConfig } from '../app-config';
 import { ComponentTypes } from '../component-types.enum';
 import { Framework } from '../framework';
 import { FrameworkApplicationOptions } from './framework-application-options';
 import { FrameworkApplicationPrototype } from './framework-application-prototype';
 
 export const Application =
-  <T extends GenericAppConfig>(
+  <T extends AppConfig<GenericAppConfig>>(
     options: FrameworkApplicationOptions<T>,
   ): ClassDecorator =>
   (target: CallableFunction): void => {

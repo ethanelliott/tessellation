@@ -1,0 +1,65 @@
+{
+  "root": "libs/modules/socket",
+  "sourceRoot": "libs/modules/socket/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/socket",
+        "tsConfig": "libs/modules/socket/tsconfig.lib.json",
+        "packageJson": "libs/modules/socket/package.json",
+        "main": "libs/modules/socket/src/index.ts",
+        "assets": ["libs/modules/socket/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/modules/socket/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/modules/socket"],
+      "options": {
+        "jestConfig": "libs/modules/socket/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx run modules-socket:bump",
+          "nx run modules-socket:build",
+          "nx run modules-socket:npm-publish"
+        ],
+        "parallel": false
+      }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm publish --access public"
+        ],
+        "cwd": "dist/libs/modules/socket",
+        "parallel": false
+      }
+    },
+    "bump": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm version patch"
+        ],
+        "cwd": "libs/modules/socket",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

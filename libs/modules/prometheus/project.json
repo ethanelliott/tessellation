@@ -1,0 +1,65 @@
+{
+  "root": "libs/modules/prometheus",
+  "sourceRoot": "libs/modules/prometheus/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/prometheus",
+        "tsConfig": "libs/modules/prometheus/tsconfig.lib.json",
+        "packageJson": "libs/modules/prometheus/package.json",
+        "main": "libs/modules/prometheus/src/index.ts",
+        "assets": ["libs/modules/prometheus/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/modules/prometheus/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/modules/prometheus"],
+      "options": {
+        "jestConfig": "libs/modules/prometheus/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx run modules-prometheus:bump",
+          "nx run modules-prometheus:build",
+          "nx run modules-prometheus:npm-publish"
+        ],
+        "parallel": false
+      }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm publish --access public"
+        ],
+        "cwd": "dist/libs/modules/prometheus",
+        "parallel": false
+      }
+    },
+    "bump": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm version patch"
+        ],
+        "cwd": "libs/modules/prometheus",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

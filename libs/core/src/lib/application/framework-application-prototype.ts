@@ -4,18 +4,19 @@
  *************************/
 
 import {
+  AppConfig,
   GenericAppConfig,
   ModuleWithProviders,
   NonEmptyArray,
 } from '@tessellation/core';
-import { Token } from 'typedi';
 
 import { ComponentTypes } from '../component-types.enum';
+import { Token } from '../di';
 import { ConstructableFrameworkLoader } from '../loader';
-import { GenericFrameworkProvider } from '../provider/framework-provider';
+import { GenericFrameworkProvider } from '../provider';
 
 export interface FrameworkApplicationPrototype {
-  appConfigToken?: Token<GenericAppConfig>;
+  appConfigToken?: Token<AppConfig<GenericAppConfig>>;
   providers: NonEmptyArray<GenericFrameworkProvider> | undefined;
   loaders?: NonEmptyArray<ConstructableFrameworkLoader>;
   modules?: NonEmptyArray<CallableFunction | ModuleWithProviders>;

@@ -3,7 +3,7 @@
  * Ethan Elliott
  *************************/
 
-import { Service } from 'typedi';
+import { Service } from '@tessellation/core';
 
 @Service()
 export class ExampleService {

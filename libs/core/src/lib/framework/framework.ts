@@ -3,10 +3,9 @@
  * Ethan Elliott
  *************************/
 
-import { Container, Token } from 'typedi';
-
-import { GenericAppConfig } from '../app-config';
+import { AppConfig, GenericAppConfig } from '../app-config';
 import { ComponentTypes } from '../component-types.enum';
+import { Container, Token } from '../di';
 import {
   ConstructableFrameworkLoader,
   FrameworkLoaderOrder,
@@ -29,7 +28,7 @@ import { FrameworkConfiguration } from './framework-configuration';
 import { runInOrder } from './run-in-order';
 
 export class Framework {
-  private _appConfig: Token<GenericAppConfig>;
+  private _appConfig: Token<AppConfig<GenericAppConfig>>;
 
   private readonly _modules: Array<
     ConstructableFrameworkModule | ModuleWithProviders
@@ -55,7 +54,9 @@ export class Framework {
       .then(async () => await this._bootstrapLoaders());
   }
 
-  private _registerAppConfigToken(appConfig: Token<GenericAppConfig>): this {
+  private _registerAppConfigToken(
+    appConfig: Token<AppConfig<GenericAppConfig>>,
+  ): this {
     this._appConfig = appConfig;
 
     return this;
@@ -105,7 +106,7 @@ export class Framework {
 
   private _recursiveParseModule(
     modules: Array<ConstructableFrameworkModule | ModuleWithProviders>,
-  ): Array<CallableFunction> {
+  ): Array<CallableFunction | ConstructableFrameworkModule> {
     return modules.flatMap(fModule => {
       if ('frameworkModule' in fModule) {
         this._registerProviders(
@@ -275,7 +276,7 @@ export class Framework {
       .then(() => this);
   }
 
-  static configure<T extends GenericAppConfig>(
+  static configure<T extends AppConfig<GenericAppConfig>>(
     config: FrameworkConfiguration<T>,
   ): Framework {
     const framework: Framework = new Framework();

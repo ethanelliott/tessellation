@@ -7241,17 +7241,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express-actuator@npm:^1.8.0":
-  version: 1.8.0
-  resolution: "express-actuator@npm:1.8.0"
-  dependencies:
-    express: ^4.17.1
-    moment: ^2.29.1
-    properties-reader: ^2.2.0
-  checksum: 2547394fbf230e5b62ce5feea1181e3a09d2bb20d7661e4b716bb285b8976c383a79460ad31b43bd108fb53131ab149173305928e3a9c65fd7a32a9df407e675
-  languageName: node
-  linkType: hard
-
 "express-session@npm:^1.17.1":
   version: 1.17.2
   resolution: "express-session@npm:1.17.2"
@@ -11630,13 +11619,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.29.1":
-  version: 2.29.1
-  resolution: "moment@npm:2.29.1"
-  checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
-  languageName: node
-  linkType: hard
-
 "move-concurrently@npm:^1.0.1":
   version: 1.0.1
   resolution: "move-concurrently@npm:1.0.1"
@@ -13606,15 +13588,6 @@ __metadata:
     kleur: ^3.0.3
     sisteransi: ^1.0.5
   checksum: d8fd1fe63820be2412c13bfc5d0a01909acc1f0367e32396962e737cb2fc52d004f3302475d5ce7d18a1e8a79985f93ff04ee03007d091029c3f9104bffc007d
-  languageName: node
-  linkType: hard
-
-"properties-reader@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "properties-reader@npm:2.2.0"
-  dependencies:
-    mkdirp: ^1.0.4
-  checksum: a5c5684b1e16633cb695f4fef5476a63f43298619381e8f7f609448f3bda32b26d7c9042b57a427a6dedd1c7fdca1a01ccbe8771b4311ed534079b676c64eec7
   languageName: node
   linkType: hard
 
@@ -16050,7 +16023,6 @@ __metadata:
     eslint-plugin-unicorn: ^38.0.0
     eslint-plugin-vue: ^7.8.0
     express: ^4.17.1
-    express-actuator: ^1.8.0
     graphql: ^15.3.0
     helmet: ^4.6.0
     husky: ^7.0.0
@@ -16081,7 +16053,6 @@ __metadata:
     ts-jest: 27.0.5
     tslib: ^2.3.1
     type-graphql: ^1.1.1
-    typedi: ^0.10.0
     typedoc: ^0.22.8
     typeorm: ^0.2.39
     typeorm-typedi-extensions: ^0.4.1
@@ -16685,13 +16656,6 @@ __metadata:
   version: 0.0.6
   resolution: "typedarray@npm:0.0.6"
   checksum: 33b39f3d0e8463985eeaeeacc3cb2e28bc3dfaf2a5ed219628c0b629d5d7b810b0eb2165f9f607c34871d5daa92ba1dc69f49051cf7d578b4cbd26c340b9d1b1
-  languageName: node
-  linkType: hard
-
-"typedi@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "typedi@npm:0.10.0"
-  checksum: d26491e3684677d898f745b2ea5403cad4e03f7ed87b35d0a1cc80cbb4837d50042e100574da77d56dd04e3f0270a6f7df18270171c828bec6b93cefbac059a3
   languageName: node
   linkType: hard
 

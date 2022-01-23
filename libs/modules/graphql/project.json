@@ -1,0 +1,65 @@
+{
+  "root": "libs/modules/graphql",
+  "sourceRoot": "libs/modules/graphql/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/graphql",
+        "tsConfig": "libs/modules/graphql/tsconfig.lib.json",
+        "packageJson": "libs/modules/graphql/package.json",
+        "main": "libs/modules/graphql/src/index.ts",
+        "assets": ["libs/modules/graphql/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/modules/graphql/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/modules/graphql"],
+      "options": {
+        "jestConfig": "libs/modules/graphql/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx run modules-graphql:bump",
+          "nx run modules-graphql:build",
+          "nx run modules-graphql:npm-publish"
+        ],
+        "parallel": false
+      }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm publish --access public"
+        ],
+        "cwd": "dist/libs/modules/graphql",
+        "parallel": false
+      }
+    },
+    "bump": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm version patch"
+        ],
+        "cwd": "libs/modules/graphql",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

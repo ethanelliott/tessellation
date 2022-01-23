@@ -3,7 +3,7 @@
  * Ethan Elliott
  *************************/
 
-import { Token } from 'typedi';
+import { Token } from '../di';
 
 export const APP_CONFIG_TOKEN_SYMBOL = Symbol('appConfigToken');
 

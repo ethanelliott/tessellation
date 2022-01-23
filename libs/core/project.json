@@ -44,7 +44,7 @@
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "npm publish"
+          "npm publish --access public"
         ],
         "cwd": "dist/libs/core",
         "parallel": false

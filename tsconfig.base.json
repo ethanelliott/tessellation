@@ -17,8 +17,17 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tessellation/common": ["libs/common/src/index.ts"],
-      "@tessellation/core": ["libs/core/src/index.ts"]
+      "@tessellation/banner": ["libs/modules/banner/src/index.ts"],
+      "@tessellation/core": ["libs/core/src/index.ts"],
+      "@tessellation/database": ["libs/modules/database/src/index.ts"],
+      "@tessellation/di": ["libs/di/src/index.ts"],
+      "@tessellation/express": ["libs/modules/express/src/index.ts"],
+      "@tessellation/graphql": ["libs/modules/graphql/src/index.ts"],
+      "@tessellation/logger": ["libs/modules/logger/src/index.ts"],
+      "@tessellation/prometheus": ["libs/modules/prometheus/src/index.ts"],
+      "@tessellation/server": ["libs/modules/server/src/index.ts"],
+      "@tessellation/socket": ["libs/modules/socket/src/index.ts"],
+      "@tessellation/swagger": ["libs/modules/swagger/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

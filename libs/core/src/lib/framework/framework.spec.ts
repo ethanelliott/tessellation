@@ -3,8 +3,9 @@
  * Ethan Elliott
  *************************/
 
-import { Framework, FrameworkProvider } from '@tessellation/core';
-import { Token } from 'typedi';
+import { Token } from '../di';
+import { FrameworkProvider } from '../provider';
+import { Framework } from './framework';
 
 describe('framework', () => {
   it('should exist', () => {

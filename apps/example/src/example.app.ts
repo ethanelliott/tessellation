@@ -3,31 +3,14 @@
  * Ethan Elliott
  *************************/
 
-import {
-  BannerModule,
-  ExpressModule,
-  LoggerModule,
-  PrometheusModule,
-  ServerModule,
-  SwaggerModule,
-} from '@tessellation/common';
 import { Application } from '@tessellation/core';
 
-import { ExampleController } from './app/controllers/example.controller';
+import { AppModule } from './app/app.module';
 import { APP_CONFIG_TOKEN, AppConfigProvider } from './app-config';
 
 @Application({
   appConfigToken: APP_CONFIG_TOKEN,
-  modules: [
-    LoggerModule,
-    BannerModule,
-    ServerModule,
-    ExpressModule.withConfig({
-      controllers: [ExampleController],
-    }),
-    SwaggerModule,
-    PrometheusModule,
-  ],
+  modules: [AppModule],
   providers: [AppConfigProvider],
 })
 export class ExampleApp {}

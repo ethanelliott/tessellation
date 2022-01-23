@@ -1,0 +1,65 @@
+{
+  "root": "libs/modules/swagger",
+  "sourceRoot": "libs/modules/swagger/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/swagger",
+        "tsConfig": "libs/modules/swagger/tsconfig.lib.json",
+        "packageJson": "libs/modules/swagger/package.json",
+        "main": "libs/modules/swagger/src/index.ts",
+        "assets": ["libs/modules/swagger/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/modules/swagger/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/modules/swagger"],
+      "options": {
+        "jestConfig": "libs/modules/swagger/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx run modules-swagger:bump",
+          "nx run modules-swagger:build",
+          "nx run modules-swagger:npm-publish"
+        ],
+        "parallel": false
+      }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm publish --access public"
+        ],
+        "cwd": "dist/libs/modules/swagger",
+        "parallel": false
+      }
+    },
+    "bump": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm version patch"
+        ],
+        "cwd": "libs/modules/swagger",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

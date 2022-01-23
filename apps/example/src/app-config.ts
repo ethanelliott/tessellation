@@ -8,13 +8,13 @@ import {
   appConfigLoader,
   FrameworkProvider,
   GenericAppConfig,
+  Token,
 } from '@tessellation/core';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { Token } from 'typedi';
 import { parse } from 'yaml';
 
-export const APP_CONFIG_TOKEN = new Token<Config>('app-config');
+export const APP_CONFIG_TOKEN = new Token<AppConfig<Config>>('app-config');
 
 export interface Config extends GenericAppConfig {
   customConfigValue: string;

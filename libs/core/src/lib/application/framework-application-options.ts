@@ -3,15 +3,16 @@
  * Ethan Elliott
  *************************/
 
-import { Token } from 'typedi';
-
-import { GenericAppConfig } from '../app-config';
+import { AppConfig, GenericAppConfig } from '../app-config';
+import { Token } from '../di';
 import { ConstructableFrameworkLoader } from '../loader';
 import { ModuleWithProviders } from '../module';
-import { GenericFrameworkProvider } from '../provider/framework-provider';
+import { GenericFrameworkProvider } from '../provider';
 import { NonEmptyArray } from '../types';
 
-export interface FrameworkApplicationOptions<T extends GenericAppConfig> {
+export interface FrameworkApplicationOptions<
+  T extends AppConfig<GenericAppConfig>,
+> {
   appConfigToken?: Token<T>;
   modules?: NonEmptyArray<CallableFunction | ModuleWithProviders>;
   providers?: NonEmptyArray<GenericFrameworkProvider>;

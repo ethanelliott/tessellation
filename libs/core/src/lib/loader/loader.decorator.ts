@@ -27,6 +27,8 @@ export function Loader(options?: FrameworkLoaderOptions): ClassDecorator {
 
     proto.order = options?.order ?? FrameworkLoaderOrder.ANY;
 
-    proto.deps = options?.deps as NonEmptyArray<ConstructableFrameworkLoader>;
+    proto.deps = options?.deps as
+      | NonEmptyArray<ConstructableFrameworkLoader>
+      | undefined;
   };
 }

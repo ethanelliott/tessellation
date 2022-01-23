@@ -3,13 +3,16 @@
  * Ethan Elliott
  *************************/
 
-import { GenericFrameworkProvider } from '../provider/framework-provider';
+import { ConstructableFrameworkLoader } from '../loader';
+import { GenericFrameworkProvider } from '../provider';
 import { NonEmptyArray } from '../types';
 import { ConstructableFrameworkModule } from './framework-module';
 import { ModuleWithProviders } from './module-with-providers';
 
 export interface FrameworkModuleOptions {
-  modules?: NonEmptyArray<ConstructableFrameworkModule | ModuleWithProviders>;
+  modules?: NonEmptyArray<
+    CallableFunction | ConstructableFrameworkModule | ModuleWithProviders
+  >;
   providers?: NonEmptyArray<GenericFrameworkProvider>;
-  loaders?: NonEmptyArray<CallableFunction>;
+  loaders?: NonEmptyArray<CallableFunction | ConstructableFrameworkLoader>;
 }

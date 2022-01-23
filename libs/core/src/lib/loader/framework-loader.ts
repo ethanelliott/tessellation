@@ -4,8 +4,8 @@
  *************************/
 
 import { ComponentTypes } from '../component-types.enum';
-import { ConstructableWithPrototype } from '../constructable-with-prototype';
-import { FrameworkSettings } from '../settings/framework-settings';
+import { ConstructableWithPrototype } from '../constructable';
+import { FrameworkSettings } from '../settings';
 import { NonEmptyArray } from '../types';
 
 export type FrameworkLoaderFunction = <T>(

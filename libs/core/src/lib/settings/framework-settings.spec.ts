@@ -10,12 +10,12 @@ describe('frameworkSettings', () => {
     expect(FrameworkSettings).toBeTruthy();
   });
 
-  it("should fail to get a value that doesn't exist", () => {
+  it('should fail to get a value that doesn\'t exist', () => {
     const settings = new FrameworkSettings();
 
     expect(() => {
       settings.getValue('test');
-    }).toThrow("Settings does not contain 'test'");
+    }).toThrow('Settings does not contain \'test\'');
   });
 
   it('should be able to set', () => {
@@ -32,7 +32,7 @@ describe('frameworkSettings', () => {
     settings.setValue('test', 'hello');
     expect(() => {
       settings.setValue('test', 'BAD');
-    }).toThrow("Settings already has 'test'");
+    }).toThrow('Settings already has \'test\'');
   });
 
   it('should be able to get', () => {
@@ -42,7 +42,7 @@ describe('frameworkSettings', () => {
     expect(settings.getValue('test')).toBe('hello');
   });
 
-  it("should not find a value that wasn't set", () => {
+  it('should not find a value that wasn\'t set', () => {
     const settings = new FrameworkSettings();
 
     expect(settings.hasValue('test')).toBe(false);

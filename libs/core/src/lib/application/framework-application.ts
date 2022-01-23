@@ -3,7 +3,7 @@
  * Ethan Elliott
  *************************/
 
-import { ConstructableWithPrototype } from '../constructable-with-prototype';
+import { ConstructableWithPrototype } from '../constructable';
 import { FrameworkApplicationInstance } from './framework-application-instance';
 import { FrameworkApplicationPrototype } from './framework-application-prototype';
 

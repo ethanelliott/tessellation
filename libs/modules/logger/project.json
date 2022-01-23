@@ -1,0 +1,65 @@
+{
+  "root": "libs/modules/logger",
+  "sourceRoot": "libs/modules/logger/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/logger",
+        "tsConfig": "libs/modules/logger/tsconfig.lib.json",
+        "packageJson": "libs/modules/logger/package.json",
+        "main": "libs/modules/logger/src/index.ts",
+        "assets": ["libs/modules/logger/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/modules/logger/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/modules/logger"],
+      "options": {
+        "jestConfig": "libs/modules/logger/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx run modules-logger:bump",
+          "nx run modules-logger:build",
+          "nx run modules-logger:npm-publish"
+        ],
+        "parallel": false
+      }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm publish --access public"
+        ],
+        "cwd": "dist/libs/modules/logger",
+        "parallel": false
+      }
+    },
+    "bump": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm version patch"
+        ],
+        "cwd": "libs/modules/logger",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

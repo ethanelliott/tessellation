@@ -1,9 +1,17 @@
 {
   "version": 2,
   "projects": {
-    "common": "libs/common",
     "core": "libs/core",
     "example": "apps/example",
-    "landing": "apps/landing"
+    "landing": "apps/landing",
+    "modules-banner": "libs/modules/banner",
+    "modules-database": "libs/modules/database",
+    "modules-express": "libs/modules/express",
+    "modules-graphql": "libs/modules/graphql",
+    "modules-logger": "libs/modules/logger",
+    "modules-prometheus": "libs/modules/prometheus",
+    "modules-server": "libs/modules/server",
+    "modules-socket": "libs/modules/socket",
+    "modules-swagger": "libs/modules/swagger"
   }
 }

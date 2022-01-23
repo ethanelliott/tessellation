@@ -1,0 +1,65 @@
+{
+  "root": "libs/modules/database",
+  "sourceRoot": "libs/modules/database/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/modules/database",
+        "tsConfig": "libs/modules/database/tsconfig.lib.json",
+        "packageJson": "libs/modules/database/package.json",
+        "main": "libs/modules/database/src/index.ts",
+        "assets": ["libs/modules/database/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/modules/database/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/modules/database"],
+      "options": {
+        "jestConfig": "libs/modules/database/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx run modules-database:bump",
+          "nx run modules-database:build",
+          "nx run modules-database:npm-publish"
+        ],
+        "parallel": false
+      }
+    },
+    "npm-publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm publish --access public"
+        ],
+        "cwd": "dist/libs/modules/database",
+        "parallel": false
+      }
+    },
+    "bump": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm version patch"
+        ],
+        "cwd": "libs/modules/database",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}
