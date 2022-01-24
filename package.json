@@ -12,6 +12,7 @@
   "scripts": {
     "start": "nx serve",
     "start:example": "nx run example:serve",
+    "start:landing": "nx run landing:serve",
     "build": "nx build",
     "build:all": "nx run-many --target=build --all",
     "publish:all": "nx run-many --target=publish --all",

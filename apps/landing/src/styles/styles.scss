@@ -9,11 +9,11 @@ a {
 .background {
   width: 100vw;
   height: 100vh;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 0;
-  background: url('/img/background.png') no-repeat fixed center center;
+  background: url('/img/background.png') no-repeat;
   background-size: cover;
 }
 

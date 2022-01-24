@@ -2,12 +2,12 @@
   <v-app>
     <v-app-bar
       app
-      clipped-left
+      absolute
       dark
-      color="transparent"
+      color="rgba(0,0,0,0)"
       elevation="0"
     >
-      <v-container>
+      <v-container fluid>
         <v-col>
           <v-row
             justify="center"
@@ -21,9 +21,7 @@
               :ripple="false"
             >
               <v-toolbar-title>
-                <h1
-                  class="font-weight-thin text-lowercase"
-                >
+                <h1 class="font-weight-thin text-lowercase">
                   tessellation
                 </h1>
               </v-toolbar-title>
@@ -45,12 +43,48 @@
     <div class="background" />
     <router-view />
     <v-footer
-      app
-      color="transparent"
+      color="primary"
+      dark
+      height="200"
     >
-      <v-spacer />
-      Made with ❤️ by Ethan
-      <v-spacer />
+      <v-container>
+        <v-col>
+          <v-row
+            align="center"
+            justify="center"
+          >
+            <v-btn
+              icon
+              href="http://github.com/ethanelliott/tessellation"
+              target="_blank"
+            >
+              <v-icon>
+                mdi-github
+              </v-icon>
+            </v-btn>
+            <v-btn
+              text
+              href="https://ko-fi.com/K3K47FY1H"
+              target="_blank"
+            >
+              <img
+                height="36"
+                src="https://cdn.ko-fi.com/cdn/kofi1.png?v=3"
+                alt="Buy Me a Coffee at ko-fi.com"
+              >
+            </v-btn>
+          </v-row>
+          <v-row
+            class="mt-8"
+            align="center"
+            justify="center"
+          >
+            <div class="font-weight-regular overline">
+              &copy; Ethan Elliott {{ new Date().getFullYear() }}
+            </div>
+          </v-row>
+        </v-col>
+      </v-container>
     </v-footer>
   </v-app>
 </template>
