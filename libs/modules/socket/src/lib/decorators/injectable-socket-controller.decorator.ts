@@ -14,7 +14,7 @@ import { SOCKET_CONTROLLERS_TOKEN } from '../socket-controllers.token';
 export function InjectableSocketController(
   ...arguments_: Parameters<typeof SocketController>
 ) {
-  return (target: unknown): void => {
+  return (target: CallableFunction): void => {
     Service()(target);
     SocketController(...arguments_)(target as never);
 
