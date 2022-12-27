@@ -1,10 +1,11 @@
 {
-  "root": "libs/core",
+  "name": "core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/core/src",
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:package",
+      "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/core",
@@ -23,14 +24,14 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/core"],
+      "outputs": ["{workspaceRoot}/coverage/libs/core"],
       "options": {
-        "jestConfig": "libs/core/jest.config.js",
+        "jestConfig": "libs/core/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "nx run core:bump",
@@ -41,21 +42,17 @@
       }
     },
     "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "npm publish --access public"
-        ],
+        "commands": ["npm publish --access public"],
         "cwd": "dist/libs/core",
         "parallel": false
       }
     },
     "bump": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "npm version patch"
-        ],
+        "commands": ["npm version patch"],
         "cwd": "libs/core",
         "parallel": false
       }

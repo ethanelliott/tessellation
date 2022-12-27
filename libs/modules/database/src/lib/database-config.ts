@@ -3,13 +3,6 @@
  * Ethan Elliott
  *************************/
 
-import { DatabaseType } from 'typeorm';
+import { ConnectionOptions } from 'typeorm';
 
-export interface DatabaseConfig {
-  type: DatabaseType;
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-  database: string;
-}
+export type DatabaseConfig = ConnectionOptions;

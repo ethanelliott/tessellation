@@ -1,18 +1,21 @@
 {
-  "root": "apps/example",
+  "name": "example",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/example/src",
   "projectType": "application",
   "tags": ["type:app"],
   "targets": {
     "build": {
-      "executor": "@nrwl/node:build",
+      "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/example",
         "main": "apps/example/src/main.ts",
         "tsConfig": "apps/example/tsconfig.app.json",
         "assets": ["apps/example/src/assets"],
-        "generatePackageJson": true
+        "generatePackageJson": true,
+        "target": "node",
+        "compiler": "tsc"
       },
       "configurations": {
         "production": {
@@ -23,7 +26,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:execute",
+      "executor": "@nrwl/node:node",
       "options": {
         "buildTarget": "example:build"
       }
@@ -37,14 +40,14 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/example"],
+      "outputs": ["{workspaceRoot}/coverage/apps/example"],
       "options": {
-        "jestConfig": "apps/example/jest.config.js",
+        "jestConfig": "apps/example/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "compress": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "yarn uglifyjs --compress --output ./dist/apps/example/main.compressed.js  -- ./dist/apps/example/main.js"
@@ -53,7 +56,7 @@
       }
     },
     "docs": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "yarn typedoc --entryPointStrategy expand --tsconfig ./apps/example/tsconfig.json --out ./apps/example/src/assets/docs ./apps/example/src"

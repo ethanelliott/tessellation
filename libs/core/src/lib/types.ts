@@ -3,6 +3,4 @@
  * Ethan Elliott
  *************************/
 
-export declare type NonEmptyArray<T> =
-  | readonly [T, ...Array<T>]
-  | [T, ...Array<T>];
+export declare type NonEmptyArray<T> = [T, ...Array<T>];

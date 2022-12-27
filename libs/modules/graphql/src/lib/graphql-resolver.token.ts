@@ -3,9 +3,9 @@
  * Ethan Elliott
  *************************/
 
-import { Container, Token } from '@tessellation/core';
+import { Container, NonEmptyArray, Token } from '@tessellation/core';
 
-export const GRAPHQL_RESOLVER_TOKEN = new Token<Array<CallableFunction>>(
-  'graphql-resolvers',
-);
+export const GRAPHQL_RESOLVER_TOKEN = new Token<
+  NonEmptyArray<CallableFunction>
+>('graphql-resolvers');
 Container.set(GRAPHQL_RESOLVER_TOKEN, []);
