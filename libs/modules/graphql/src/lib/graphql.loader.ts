@@ -10,7 +10,6 @@ import {
   FrameworkLoaderFunction,
   FrameworkSettings,
   Loader,
-  NonEmptyArray,
 } from '@tessellation/core';
 import { ExpressLoader } from '@tessellation/express';
 import { Logger } from '@tessellation/logger';
@@ -32,14 +31,12 @@ export class GraphqlLoader implements FrameworkLoader {
   loader(): FrameworkLoaderFunction {
     return async (settings?: FrameworkSettings): Promise<void> => {
       if (settings) {
-        const log = new Logger(__filename, ['GRAPHQL']);
+        const logger = new Logger(__filename, ['GRAPHQL']);
         const config = Container.get(GRAPHQL_CONFIG_TOKEN);
 
-        const resolvers = Container.get(
-          GRAPHQL_RESOLVER_TOKEN,
-        ) as NonEmptyArray<CallableFunction>;
+        const resolvers = Container.get(GRAPHQL_RESOLVER_TOKEN);
 
-        log.info('Starting graphql');
+        logger.info('Starting graphql');
         const app: Application = settings.getValue<Application>('express_app');
 
         const schema = await buildSchema({
@@ -53,7 +50,7 @@ export class GraphqlLoader implements FrameworkLoader {
 
         const apolloServer = new ApolloServer({
           schema,
-          logger: log,
+          logger,
           plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
         });
 
@@ -77,7 +74,7 @@ export class GraphqlLoader implements FrameworkLoader {
           },
         );
 
-        log.info(ss.server.path);
+        logger.info(ss.server.path);
 
         addBannerEntry('graphql', `#{url}${config.path}`);
       }

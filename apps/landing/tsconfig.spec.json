@@ -8,5 +8,5 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.d.ts"]
+  "include": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.d.ts", "jest.config.ts"]
 }

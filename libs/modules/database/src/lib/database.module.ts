@@ -17,7 +17,7 @@ export class DatabaseModule {
     entities: NonEmptyArray<Constructable<unknown>>;
   }): CallableFunction {
     if (config.entities.length === 0) {
-      throw new Error('Needs at least one entities');
+      throw new Error('Needs at least one entity');
     }
 
     return DatabaseModule;

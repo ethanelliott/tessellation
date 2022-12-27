@@ -1,10 +1,11 @@
 {
-  "root": "libs/modules/express",
+  "name": "modules-express",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/modules/express/src",
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:package",
+      "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/modules/express",
@@ -23,14 +24,14 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/modules/express"],
+      "outputs": ["{workspaceRoot}/coverage/libs/modules/express"],
       "options": {
-        "jestConfig": "libs/modules/express/jest.config.js",
+        "jestConfig": "libs/modules/express/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "nx run modules-express:bump",
@@ -41,21 +42,17 @@
       }
     },
     "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "npm publish --access public"
-        ],
+        "commands": ["npm publish --access public"],
         "cwd": "dist/libs/modules/express",
         "parallel": false
       }
     },
     "bump": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "npm version patch"
-        ],
+        "commands": ["npm version patch"],
         "cwd": "libs/modules/express",
         "parallel": false
       }

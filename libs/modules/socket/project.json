@@ -1,10 +1,11 @@
 {
-  "root": "libs/modules/socket",
+  "name": "modules-socket",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/modules/socket/src",
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:package",
+      "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/modules/socket",
@@ -23,14 +24,14 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/modules/socket"],
+      "outputs": ["{workspaceRoot}/coverage/libs/modules/socket"],
       "options": {
-        "jestConfig": "libs/modules/socket/jest.config.js",
+        "jestConfig": "libs/modules/socket/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": [
           "nx run modules-socket:bump",
@@ -41,21 +42,17 @@
       }
     },
     "npm-publish": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "npm publish --access public"
-        ],
+        "commands": ["npm publish --access public"],
         "cwd": "dist/libs/modules/socket",
         "parallel": false
       }
     },
     "bump": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "npm version patch"
-        ],
+        "commands": ["npm version patch"],
         "cwd": "libs/modules/socket",
         "parallel": false
       }

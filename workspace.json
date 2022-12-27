@@ -13,5 +13,6 @@
     "modules-server": "libs/modules/server",
     "modules-socket": "libs/modules/socket",
     "modules-swagger": "libs/modules/swagger"
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

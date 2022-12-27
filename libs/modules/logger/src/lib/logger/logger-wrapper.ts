@@ -38,10 +38,12 @@ export class LoggerWrapper {
   ): void {
     if (this._logger !== undefined) {
       message = message.map(this._messageParsing());
+      const decorators = this._formatCustomDecorators(
+        customDecorators,
+      );
+
       this._logger[level](
-        `${LoggerWrapper._formatScope(scope)}${this._formatCustomDecorators(
-          customDecorators,
-        )} ${message.join(' ')}`,
+        `${LoggerWrapper._formatScope(scope)} ${decorators !== undefined && decorators !== '' ? decorators + ' ' : ''}${message.join(' ')}`,
       );
     }
   }
@@ -68,8 +70,8 @@ export class LoggerWrapper {
     };
   }
 
-  private _formatCustomDecorators(customDecorators?: Array<string>): string {
-    return customDecorators?.map(d => `[${cyan(d)}]`).join('') ?? '';
+  private _formatCustomDecorators(customDecorators?: Array<string>): string | undefined {
+    return customDecorators?.map(d => `[${cyan(d)}]`).join('');
   }
 
   private static _formatScope(scope?: string): string {

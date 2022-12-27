@@ -37,17 +37,12 @@ export class DatabaseLoader implements FrameworkLoader {
             entities.length === 1 ? 'y' : 'ies'
           }`,
         );
-        log.debug(`[${entities.map(e => e.name).join(', ')}]`);
+        log.debug(
+          `[${entities.map(entity => entity.name as string).join(', ')}]`,
+        );
 
         const options: ConnectionOptions = {
-          type: config.type as never,
-          host: config.host,
-          port: config.port,
-          username: config.username,
-          password: config.password,
-          database: config.database,
-          synchronize: true,
-          ssl: { rejectUnauthorized: false },
+          ...config,
           logging: ['schema', 'error', 'warn', 'info', 'log'],
           entities,
         };

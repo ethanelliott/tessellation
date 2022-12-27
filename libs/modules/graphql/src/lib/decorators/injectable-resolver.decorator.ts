@@ -29,7 +29,9 @@ export function InjectableResolver(
 
     Resolver(...a)(target);
 
-    const resolverArray = Container.get(GRAPHQL_RESOLVER_TOKEN);
+    const resolverArray = Container.get(
+      GRAPHQL_RESOLVER_TOKEN,
+    ) as Array<CallableFunction>;
 
     resolverArray.push(target);
 

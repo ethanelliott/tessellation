@@ -15,6 +15,7 @@ import { GraphqlProvider } from './graphql.provider';
 export class GraphqlModule {
   static withConfig(config: {
     resolvers: NonEmptyArray<CallableFunction>;
+    entities: NonEmptyArray<CallableFunction>;
   }): CallableFunction {
     if (config.resolvers.length === 0) {
       throw new Error('Needs at least one resolver');

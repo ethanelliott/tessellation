@@ -3,7 +3,7 @@
  * Ethan Elliott
  *************************/
 
-import { GenericFrameworkProvider } from '../provider/framework-provider';
+import { GenericFrameworkProvider } from '../provider';
 import { NonEmptyArray } from '../types';
 
 export interface ModuleWithProviders {

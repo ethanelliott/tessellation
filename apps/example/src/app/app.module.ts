@@ -11,6 +11,8 @@ import { ServerModule } from '@tessellation/server';
 import { SwaggerModule } from '@tessellation/swagger';
 
 import { ControllerModule } from './controllers/controller.module';
+import { ResolversModule } from './resolvers/resolvers.module';
+
 
 @Module({
   modules: [
@@ -20,6 +22,7 @@ import { ControllerModule } from './controllers/controller.module';
     ControllerModule,
     SwaggerModule,
     PrometheusModule,
+    ResolversModule,
   ],
 })
 export class AppModule {}

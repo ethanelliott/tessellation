@@ -1,6 +1,7 @@
 {
+  "name": "landing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "root": "apps/landing",
   "sourceRoot": "apps/landing/src",
   "tags": ["type:app"],
   "targets": {
@@ -44,9 +45,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/landing"],
+      "outputs": ["{workspaceRoot}/coverage/apps/landing"],
       "options": {
-        "jestConfig": "apps/landing/jest.config.js",
+        "jestConfig": "apps/landing/jest.config.ts",
         "passWithNoTests": true
       }
     }
